@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ÔN TẬP TOÁN 11 - GV NGÔ HIỀN</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#fffdf4;color:#111;font-family:Arial,sans-serif}
+header{background:#fff0a8;border-bottom:3px solid #d6a600;padding:22px;text-align:center}
+h1{font-size:clamp(26px,4vw,42px);margin:0;font-weight:900}
+header p{font-size:20px;font-weight:bold}
+main{max-width:1250px;margin:auto;padding:20px}
+.controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:18px}
+button,select{font-size:19px;font-weight:bold;padding:12px 16px;border:2px solid #b99b32;border-radius:9px;background:white;color:black;cursor:pointer}
+button:hover{background:#fff0a8}
+select{flex:1;min-width:200px}
+#status{font-size:19px;font-weight:bold;margin:12px 0}
+iframe{width:100%;height:76vh;border:3px solid #e2c760;border-radius:10px;background:white}
+.note{font-size:17px;line-height:1.6}
+</style>
+</head>
+<body>
+<header>
+<h1>ÔN TẬP TOÁN 11 – GV NGÔ HIỀN</h1>
+<p>Năm học 2026–2027 | Luyện tập – Hiểu bản chất – Chinh phục điểm số</p>
+</header>
+<main>
+<div class="controls">
+<label for="exam"><b>CHỌN ĐỀ:</b></label>
+<select id="exam"></select>
+<button onclick="previousExam()">◀ Đề trước</button>
+<button onclick="nextExam()">Đề tiếp ▶</button>
+<button onclick="openPDF()">Mở toàn màn hình ↗</button>
+</div>
+<div id="status"></div>
+<iframe id="viewer" title="Nội dung đề Toán 11"></iframe>
+<p class="note">
+Nội dung đề, hình vẽ, công thức và lời giải được giữ nguyên
+theo tài liệu PDF gốc. Dùng thanh công cụ trong khung PDF
+để chuyển trang, phóng to hoặc in tài liệu.
+</p>
+</main>
+<script>
+const examCount=15;
+const select=document.getElementById("exam");
+const viewer=document.getElementById("viewer");
+const status=document.getElementById("status");
+
+for(let i=1;i<=examCount;i++){
+ const option=document.createElement("option");
+ option.value=i;
+ option.textContent="Đề số "+String(i).padStart(2,"0");
+ select.appendChild(option);
+}
+
+function pdfPath(n){
+ return "de/de_"+String(n).padStart(2,"0")+".pdf";
+}
+
+function loadExam(n){
+ const num=Math.max(1,Math.min(examCount,n));
+ select.value=num;
+ const path=pdfPath(num);
+ viewer.src=path;
+ status.textContent="Đang xem Đề số "+String(num).padStart(2,"0");
+ localStorage.setItem("toan11_exam",num);
+}
+
+function previousExam(){loadExam(Number(select.value)-1)}
+function nextExam(){loadExam(Number(select.value)+1)}
+function openPDF(){
+ window.open(pdfPath(Number(select.value)),"_blank");
+}
+
+select.addEventListener("change",()=>loadExam(Number(select.value)));
+loadExam(Number(localStorage.getItem("toan11_exam"))||1);
+</script>
+</body>
+</html>
